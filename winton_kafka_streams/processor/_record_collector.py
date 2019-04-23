@@ -35,6 +35,11 @@ class RecordCollector:
 
         while not produced:
             try:
+                if isinstance(timestamp, tuple) and timestamp:
+                    timestamp = timestamp[-1]
+                if isinstance(timestamp, float):
+                    timestamp = int(timestamp)
+                    
                 self.producer.produce(topic, ser_value, ser_key, partition, self.on_delivery, partitioner, timestamp)
                 self.producer.poll(0)  # Ensure previous message's delivery reports are served
                 produced = True
